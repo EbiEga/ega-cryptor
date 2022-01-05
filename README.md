@@ -6,7 +6,12 @@ E.g. After encryption of **source_file.bam** these files will be generated **sou
 
 # How to run
 Make sure Java 1.8 or above version is installed on your system. type **java -version** and press enter to
-check what java version is installed. Download the **ega-cryptor-2.0.0.jar** and navigate to folder in which jar has been downloaded.
+check what java version is installed. 
+
+- ##### Downloading ega-cryptor
+  Download the **ega-cryptor-<version>.jar** from the [Releases](https://github.com/EbiEga/ega-cryptor/releases) section. 
+  Navigate to the folder in which jar has been downloaded.
+  
 - ##### Get help options
   It displays all available options.
   ```
