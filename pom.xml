@@ -22,7 +22,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <revision>2.0.0</revision>
+        <revision>${env.GITHUB_REF}</revision>
     </properties>
 
     <dependencies>
