@@ -9,7 +9,7 @@ Make sure Java 1.8 or above version is installed on your system. type **java -ve
 check what java version is installed. 
 
 - ##### Downloading ega-cryptor
-  Download the **ega-cryptor-<version>.jar** from the [Releases](https://github.com/EbiEga/ega-cryptor/releases) section. 
+  Download the latest **ega-cryptor-<version>.jar** from the [Releases](https://github.com/EbiEga/ega-cryptor/releases) section. 
   Navigate to the folder in which jar has been downloaded.
   
 - ##### Get help options
