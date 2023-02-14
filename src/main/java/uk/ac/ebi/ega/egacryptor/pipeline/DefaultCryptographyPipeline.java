@@ -28,11 +28,10 @@ import uk.ac.ebi.ega.egacryptor.stream.pipeline.DefaultStream;
 import uk.ac.ebi.ega.egacryptor.stream.pipeline.PipelineStream;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.DigestInputStream;
 import java.security.DigestOutputStream;
@@ -71,7 +70,9 @@ public class DefaultCryptographyPipeline implements CryptographyPipeline {
         final File outputFile = outputFilePath.toFile();
 
         if (!outputFile.exists() && !outputFile.mkdirs()) {
-            throw new FileNotFoundException("Path ".concat(outputFile.getPath()).concat(" doesn't exists. Unable to create path."));
+            final String message = String.format("The \"%s\" directory does not exist and it was not possible " +
+                    "to create it, or one of its parent directories.", outputFilePath);
+            throw new FileNotFoundException(message);
         }
 
         final File outputFileMD5 = FileUtils.newEmptyPath().resolve(outputFilePath).resolve(inputFile.getName().
@@ -90,13 +91,13 @@ public class DefaultCryptographyPipeline implements CryptographyPipeline {
         final MessageDigest inputStreamMessageDigest = Hash.getMD5();
         final MessageDigest outputStreamMessageDigest = Hash.getMD5();
 
-        final DigestInputStream digestInputStream = new DigestInputStream(new FileInputStream(inputFile), inputStreamMessageDigest);//Will be closed in PipelineStream
         long bytesRead;
 
-        try (final DigestOutputStream digestOutputStream = new DigestOutputStream(new FileOutputStream(outputFileGPG), outputStreamMessageDigest)) {
-            final OutputStream pgpEncryptedOutputStream = cryptography.encrypt(digestOutputStream);//Will be closed in PipelineStream
+        try (final DigestInputStream digestInputStream = new DigestInputStream(Files.newInputStream(inputFile.toPath()), inputStreamMessageDigest);
+             final DigestOutputStream digestOutputStream = new DigestOutputStream(Files.newOutputStream(outputFileGPG.toPath()), outputStreamMessageDigest)) {
+            final OutputStream pgpEncryptedOutputStream = cryptography.encrypt(digestOutputStream);
             try (final PipelineStream pipelineStream = new DefaultStream(digestInputStream, pgpEncryptedOutputStream, bufferSize)) {
-                LOGGER.info("File {} is being processed", inputFile.getPath());
+                LOGGER.info("File \"{}\" is being processed", inputFile.getPath());
                 bytesRead = pipelineStream.execute();
             }
         }

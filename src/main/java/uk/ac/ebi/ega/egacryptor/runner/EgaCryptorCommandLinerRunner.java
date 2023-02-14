@@ -26,7 +26,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import uk.ac.ebi.ega.egacryptor.cryptography.pgp.PGPCryptography;
 import uk.ac.ebi.ega.egacryptor.model.FileToProcess;
 import uk.ac.ebi.ega.egacryptor.service.IFileDiscoveryService;
 import uk.ac.ebi.ega.egacryptor.service.ITaskExecutorService;

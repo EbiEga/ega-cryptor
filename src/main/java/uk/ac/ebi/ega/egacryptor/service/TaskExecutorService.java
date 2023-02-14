@@ -30,7 +30,13 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class TaskExecutorService implements ITaskExecutorService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskExecutorService.class);
+
+    private static final String NO_FILES_TO_PROCESS = "The list of files-to-be-processed is empty. " +
+            "Please see the messages above to find out why your input-files were skipped.";
+
+
     private final CryptographyPipeline cryptographyPipeline;
 
     public TaskExecutorService(final CryptographyPipeline cryptographyPipeline) {
@@ -44,6 +50,11 @@ public class TaskExecutorService implements ITaskExecutorService {
      */
     @Override
     public void execute(final List<FileToProcess> fileToProcessList) {
+        if (fileToProcessList.isEmpty()) {
+            LOGGER.warn(NO_FILES_TO_PROCESS);
+            return;
+        }
+
         LOGGER.trace("Sequential task executor is running");
         LOGGER.debug("File to process list size={}", fileToProcessList.size());
         fileToProcessList.forEach(cryptographyPipeline::process);
@@ -54,10 +65,15 @@ public class TaskExecutorService implements ITaskExecutorService {
      * calculated by application based on no. of cores/processors.
      *
      * @param fileToProcessList List of files to process.
-     * @param noOfThreads No of threads to process list of files.
+     * @param noOfThreads       No of threads to process list of files.
      */
     @Override
     public void execute(final List<FileToProcess> fileToProcessList, final int noOfThreads) {
+        if (fileToProcessList.isEmpty()) {
+            LOGGER.warn(NO_FILES_TO_PROCESS);
+            return;
+        }
+
         LOGGER.trace("Parallel task executor is running");
         LOGGER.debug("File to process list size={}, No of threads={}", fileToProcessList.size(), noOfThreads);
 
@@ -74,8 +90,11 @@ public class TaskExecutorService implements ITaskExecutorService {
         for (final Future<String> stringFuture : futureList) {
             try {
                 stringFuture.get();
-            } catch (InterruptedException | ExecutionException e) {
-                LOGGER.error("Error while iterating over future list - " + e.getMessage(), e);
+            } catch (ExecutionException e) {
+                LOGGER.error("Error while iterating over future list: {}", e.getMessage(), e);
+            } catch (InterruptedException e) {
+                LOGGER.error("Error while iterating over future list: {}", e.getMessage(), e);
+                Thread.currentThread().interrupt();
             }
         }
         executor.shutdownNow();

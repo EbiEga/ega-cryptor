@@ -17,8 +17,8 @@
  */
 package uk.ac.ebi.ega.egacryptor.cryptography.pgp;
 
+import org.bouncycastle.bcpg.CompressionAlgorithmTags;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openpgp.PGPCompressedData;
 import org.bouncycastle.openpgp.PGPCompressedDataGenerator;
 import org.bouncycastle.openpgp.PGPException;
 import org.bouncycastle.openpgp.PGPLiteralData;
@@ -68,7 +68,7 @@ public class PGPCryptography implements Cryptography {
     private OutputStream doEncrypt(final OutputStream fileOutputStream)
             throws IOException, PGPException {
         final OutputStream pgpEncryptedDataGeneratorOutputStream = PGPUtils.getEncryptedGenerator(pgpPublicKey).open(fileOutputStream, new byte[bufferSize]);
-        final PGPCompressedDataGenerator pgpCompressedDataGenerator = new PGPCompressedDataGenerator(PGPCompressedData.ZIP);
+        final PGPCompressedDataGenerator pgpCompressedDataGenerator = new PGPCompressedDataGenerator(CompressionAlgorithmTags.ZIP);
         final OutputStream pgpCompressedDataGeneratorOutputStream = pgpCompressedDataGenerator.open(pgpEncryptedDataGeneratorOutputStream);//Don't close this
         final PGPLiteralDataGenerator pgpLiteralDataGenerator = new PGPLiteralDataGenerator();
         final OutputStream pgpLiteralDataGeneratorOutputStream = pgpLiteralDataGenerator.open(pgpCompressedDataGeneratorOutputStream, PGPLiteralData.BINARY, ""
