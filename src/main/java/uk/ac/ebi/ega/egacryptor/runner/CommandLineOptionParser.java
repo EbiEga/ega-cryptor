@@ -37,6 +37,10 @@ public class CommandLineOptionParser {
     public static final String OPTIONS_HELP = "h";
     private static final OptionParser optionParser = buildParser();
 
+    private CommandLineOptionParser() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static OptionParser buildParser() {
         final OptionParser parser = new OptionParser();
         parser.accepts(FILE_TO_ENCRYPT_PATH, "File(s) to encrypt. Provide file/folder path or comma separated file path if multiple files in double quotes").

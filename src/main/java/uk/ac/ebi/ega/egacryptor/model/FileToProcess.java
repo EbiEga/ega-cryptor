@@ -46,4 +46,22 @@ public class FileToProcess {
                 "fileToEncryptPath=").concat(fileToEncryptPath.toString()).concat(
                 ", outputFilePath=").concat(outputFilePath.toString()).concat("}");
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FileToProcess)) return false;
+
+        final FileToProcess that = (FileToProcess) o;
+
+        if (!fileToEncryptPath.equals(that.fileToEncryptPath)) return false;
+        return outputFilePath.equals(that.outputFilePath);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fileToEncryptPath.hashCode();
+        result = 31 * result + outputFilePath.hashCode();
+        return result;
+    }
 }

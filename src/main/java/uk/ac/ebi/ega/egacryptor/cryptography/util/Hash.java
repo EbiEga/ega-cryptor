@@ -26,7 +26,11 @@ import java.security.NoSuchAlgorithmException;
 
 public class Hash {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Hash.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Hash.class);
+
+    private Hash() {
+        throw new IllegalStateException("Utility class.");
+    }
 
     public static MessageDigest getMD5() {
         return getHashingAlgorithm("MD5");

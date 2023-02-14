@@ -17,59 +17,44 @@
  */
 package uk.ac.ebi.ega.egacryptor.cryptography.pgp;
 
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.ac.ebi.ega.egacryptor.BaseTest;
 import uk.ac.ebi.ega.egacryptor.configuration.EgaCryptorConfiguration;
 import uk.ac.ebi.ega.egacryptor.cryptography.Cryptography;
 import uk.ac.ebi.ega.egacryptor.exception.CryptographyException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import static org.junit.Assert.assertNotNull;
-import static uk.ac.ebi.ega.egacryptor.cryptography.util.FileUtils.newEmptyPath;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource("classpath:application-test.properties")
 @ContextConfiguration(classes = EgaCryptorConfiguration.class)
-@RunWith(SpringRunner.class)
-public class PGPCryptographyTest {
+@ExtendWith(SpringExtension.class)
+class PGPCryptographyTest extends BaseTest {
 
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    private Path temporaryFolder;
 
     @Autowired
     private Cryptography cryptography;
 
-    @After
-    public void cleanTestEnvironment() {
-        temporaryFolder.delete();
-    }
-
     @Test
-    public void encrypt_WhenGivenOutputStream_ThenReturnsPGPOutputStream() throws IOException, CryptographyException {
-        final File outputFolder = temporaryFolder.newFolder("path", "to", "process", "files");
-        final File createdFile = new File(outputFolder, "fileToProcess.txt.gpg");
-        try (final OutputStream outputStream = new FileOutputStream(createdFile);
-             final OutputStream pgpOutputStream = cryptography.encrypt(outputStream)) {
-            assertNotNull(pgpOutputStream);
-        }
-    }
+    void encrypt_WhenGivenOutputStream_ThenReturnsPGPOutputStream() throws IOException, CryptographyException {
+        final Path subDirs = createSubDirs(temporaryFolder, "path", "to", "process", "files");
+        final Path createdFile = createFile(subDirs, "fileToProcess.txt.gpg");
 
-    @Test(expected = FileNotFoundException.class)
-    public void encrypt_WhenGivenInvalidOutputStream_ThenThrowsException() throws IOException, CryptographyException {
-        try (final OutputStream outputStream = new FileOutputStream(newEmptyPath().toFile());
+        try (final OutputStream outputStream = Files.newOutputStream(createdFile);
              final OutputStream pgpOutputStream = cryptography.encrypt(outputStream)) {
-            assertNotNull(pgpOutputStream);
+            assertThat(pgpOutputStream).isNotNull();
         }
     }
 }

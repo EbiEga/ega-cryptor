@@ -18,8 +18,8 @@
 package uk.ac.ebi.ega.egacryptor.cryptography.pgp;
 
 import org.bouncycastle.bcpg.PublicKeyAlgorithmTags;
+import org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags;
 import org.bouncycastle.bcpg.sig.KeyFlags;
-import org.bouncycastle.openpgp.PGPEncryptedData;
 import org.bouncycastle.openpgp.PGPEncryptedDataGenerator;
 import org.bouncycastle.openpgp.PGPException;
 import org.bouncycastle.openpgp.PGPPublicKey;
@@ -50,6 +50,10 @@ public class PGPUtils {
             PGPSignature.CASUAL_CERTIFICATION,
             PGPSignature.NO_CERTIFICATION,
             PGPSignature.DEFAULT_CERTIFICATION);
+
+    private PGPUtils() {
+        throw new IllegalStateException("Utility class.");
+    }
 
     public static PGPPublicKey readPublicKey(final InputStream inputStream) throws IOException, PGPException {
 
@@ -88,7 +92,7 @@ public class PGPUtils {
 
     public static PGPEncryptedDataGenerator getEncryptedGenerator(final PGPPublicKey pgpPublicKey) {
         final PGPEncryptedDataGenerator pgpEncryptedDataGenerator = new PGPEncryptedDataGenerator(
-                new JcePGPDataEncryptorBuilder(PGPEncryptedData.CAST5).
+                new JcePGPDataEncryptorBuilder(SymmetricKeyAlgorithmTags.CAST5).
                         setWithIntegrityPacket(true).
                         setSecureRandom(new SecureRandom()).
                         setProvider("BC"));

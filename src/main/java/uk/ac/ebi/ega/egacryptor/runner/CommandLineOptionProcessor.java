@@ -49,14 +49,18 @@ public class CommandLineOptionProcessor {
     private CommandLineOptionProcessor(final OptionSet optionSet, final Path defaultOutputFilePath) throws FileNotFoundException {
         final String userDefinedOutputFilePath = optionSet.valueOf(OUTPUT_FOLDER_PATH).toString();
 
-        outputFolderPath = StringUtils.isEmpty(userDefinedOutputFilePath) ? defaultOutputFilePath.normalize().toAbsolutePath() : Paths.get(userDefinedOutputFilePath)
-                .normalize()
-                .toAbsolutePath();
+        outputFolderPath = StringUtils.hasText(userDefinedOutputFilePath) ?
+                Paths.get(userDefinedOutputFilePath)
+                        .normalize()
+                        .toAbsolutePath()
+                : defaultOutputFilePath.normalize().toAbsolutePath();
 
         final File outputFolder;
 
         if (!(outputFolder = outputFolderPath.toFile()).exists() && !outputFolder.mkdirs()) {
-            throw new FileNotFoundException("Output directory path doesn't exists. Unable to create directory.");
+            final String message = String.format("Output directory path \"%s\" does not exist " +
+                            "and it was not possible to create it either.", outputFolderPath.toAbsolutePath());
+            throw new FileNotFoundException(message);
         }
 
         fileToEncryptPaths = Arrays.asList(optionSet.valueOf(FILE_TO_ENCRYPT_PATH).toString().split(",")).
