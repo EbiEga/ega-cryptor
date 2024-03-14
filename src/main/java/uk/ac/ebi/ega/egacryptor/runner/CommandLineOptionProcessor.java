@@ -49,10 +49,8 @@ public class CommandLineOptionProcessor {
     private CommandLineOptionProcessor(final OptionSet optionSet, final Path defaultOutputFilePath) throws FileNotFoundException {
         final String userDefinedOutputFilePath = optionSet.valueOf(OUTPUT_FOLDER_PATH).toString();
 
-        outputFolderPath = StringUtils.hasText(userDefinedOutputFilePath) ?
-                Paths.get(userDefinedOutputFilePath)
-                        .normalize()
-                        .toAbsolutePath()
+        outputFolderPath = StringUtils.hasText(userDefinedOutputFilePath)
+                ? Paths.get(userDefinedOutputFilePath).normalize().toAbsolutePath()
                 : defaultOutputFilePath.normalize().toAbsolutePath();
 
         final File outputFolder;
