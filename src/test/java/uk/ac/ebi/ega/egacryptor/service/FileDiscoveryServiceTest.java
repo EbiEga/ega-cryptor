@@ -17,6 +17,7 @@
  */
 package uk.ac.ebi.ega.egacryptor.service;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,6 +26,7 @@ import uk.ac.ebi.ega.egacryptor.BaseTest;
 import uk.ac.ebi.ega.egacryptor.model.FileToProcess;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -196,4 +198,36 @@ class FileDiscoveryServiceTest extends BaseTest {
         assertThat(discoveredFiles)
                 .containsExactly(new FileToProcess(normalFile.toAbsolutePath()));
     }
+
+    @Test
+    void symlinksAndHardlinksAreSupported() throws IOException {
+        final String tempDir = createSubDirs(temporaryFolder, "subDir1").toString();
+
+        final Path symlink = createSymlink(
+                Paths.get(tempDir, "symlink"),
+                Paths.get("/bin/sh"));
+        final Path hardlink = createHardlink(
+                Paths.get(tempDir, "hardLink"),
+                Paths.get(tempDir, "symlink"));
+
+        final List<Path> filesToProcess = Lists.list(symlink, hardlink);
+        final FileDiscoveryService fileDiscoveryService = new FileDiscoveryService();
+
+        final List<FileToProcess> discoveredFiles = fileDiscoveryService.discoverFilesRecursively(
+                filesToProcess, newEmptyPath());
+
+        assertThat(discoveredFiles)
+                .containsExactlyInAnyOrder(
+                        new FileToProcess(symlink),
+                        new FileToProcess(hardlink));
+    }
+
+    private Path createSymlink(final Path link, final Path existing) throws IOException {
+        return Files.createSymbolicLink(link, existing);
+    }
+
+    private Path createHardlink(final Path link, final Path existing) throws IOException {
+        return Files.createLink(link, existing);
+    }
+
 }
