@@ -55,7 +55,7 @@ public class CommandLineOptionParser {
         parser.accepts(UTILIZE_OPTIMIZE_RESOURCE, "Set this option to allow application to create maximum threads equals to 75% capacity of cores/processors available on machine");
         parser.accepts(UTILIZE_HALF_RESOURCE, "Set this option to allow application to create maximum threads equals to 50% capacity of cores/processors available on machine");
         parser.accepts(USER_THREADS, "Set this option if user wants to control application to create maximum threads as specified. " +
-                "Application will calculate no. of cores/processors available on machine & will create threads accordingly").
+                "Application will calculate the number of cores/processors available on the machine and will create threads accordingly").
                 withRequiredArg().
                 ofType(Integer.class);
         parser.accepts(OPTIONS_HELP, "Use this option to get help");

@@ -17,10 +17,10 @@
  */
 package uk.ac.ebi.ega.egacryptor.cryptography.util;
 
+import org.bouncycastle.util.encoders.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -47,7 +47,7 @@ public class Hash {
 
     public static String normalize(MessageDigest messageDigest) {
         if ("MD5".equals(messageDigest.getAlgorithm())) {
-            return DatatypeConverter.printHexBinary(messageDigest.digest()).toLowerCase();
+            return Hex.toHexString(messageDigest.digest()).toLowerCase();
         }
         return new String(messageDigest.digest());
     }

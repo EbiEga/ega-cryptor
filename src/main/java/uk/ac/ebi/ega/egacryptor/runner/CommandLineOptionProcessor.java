@@ -64,7 +64,7 @@ public class CommandLineOptionProcessor {
         fileToEncryptPaths = Arrays.asList(optionSet.valueOf(FILE_TO_ENCRYPT_PATH).toString().split(",")).
                 parallelStream().map(filePath -> Paths.get(filePath.trim()).normalize().toAbsolutePath()).collect(Collectors.toList());
         noOfThreads = determineNoOfThreads(optionSet);
-        LOGGER.info("Maximum {} no. of threads will be created to process the file(s)", noOfThreads);
+        LOGGER.info("Maximum {} threads will be created to process the file(s)", noOfThreads);
     }
 
     static CommandLineOptionProcessor processOptions(final OptionSet optionSet, final Path defaultOutputFilePath) throws IOException {
@@ -73,7 +73,7 @@ public class CommandLineOptionProcessor {
 
     private int determineNoOfThreads(final OptionSet optionSet) {
         final int availableProcessors = Runtime.getRuntime().availableProcessors();
-        LOGGER.info("Application has detected {} no. of cores/processors. Threads will be created based on option provided", availableProcessors);
+        LOGGER.info("The application has detected {} cores/processors.", availableProcessors);
 
         if (availableProcessors == 1) {
             LOGGER.info("Single processor has been detected. File(s) will be processed sequentially. " +
@@ -92,10 +92,13 @@ public class CommandLineOptionProcessor {
             LOGGER.info("User defined resource option has been selected");
             final int userDefinedThreads = Integer.parseInt(optionSet.valueOf(USER_THREADS).toString());
             if (userDefinedThreads >= availableProcessors) {
-                LOGGER.warn("Provided no. of threads are >= available cores on this machine. Application will try to use maximum resources to process the file(s)");
+                LOGGER.warn("The requested number of threads is greater than or equal " +
+                        "to the number of available cores on this machine. " +
+                        "The application will try to use the maximum number of available cores to process the file(s)");
                 return availableProcessors - 1;
             } else if (userDefinedThreads <= 0) {
-                LOGGER.warn("Provided no. of threads are <= 0. Application will process the file(s) sequentially using single thread");
+                LOGGER.warn("The requested number of threads is less than or equal to zero. " +
+                        "The application will process the file(s) sequentially, using a single thread");
                 return 1;
             }
             return userDefinedThreads;

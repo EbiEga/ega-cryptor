@@ -109,7 +109,6 @@ public class PGPUtils {
         return hasKeyFlags(key, KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE);
     }
 
-    @SuppressWarnings(value = "unchecked")
     private static boolean hasKeyFlags(final PGPPublicKey encKey, final int keyUsage) {
         if (encKey.isMasterKey()) {
             for (final int masterKeyCertType : MASTER_KEY_CERTIFICATION_TYPES) {

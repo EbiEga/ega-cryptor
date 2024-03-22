@@ -62,7 +62,7 @@ public class TaskExecutorService implements ITaskExecutorService {
 
     /**
      * Executes process in parallel based on thread specified by user or
-     * calculated by application based on no. of cores/processors.
+     * calculated by application based on the number of cores/processors.
      *
      * @param fileToProcessList List of files to process.
      * @param noOfThreads       No of threads to process list of files.
@@ -78,7 +78,7 @@ public class TaskExecutorService implements ITaskExecutorService {
         LOGGER.debug("File to process list size={}, No of threads={}", fileToProcessList.size(), noOfThreads);
 
         final int noOfThreadsToCreate = Math.min(fileToProcessList.size(), noOfThreads);
-        LOGGER.info("Based on file count, {} no. of threads will process the file(s)", noOfThreads);
+        LOGGER.info("Based on the number of file(s), {} threads will process the file(s)", noOfThreads);
 
         final ExecutorService executor = Executors.newFixedThreadPool(noOfThreadsToCreate);
         final List<? extends Future<String>> futureList = fileToProcessList
