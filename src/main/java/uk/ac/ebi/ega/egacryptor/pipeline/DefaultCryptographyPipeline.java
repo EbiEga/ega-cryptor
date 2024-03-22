@@ -103,7 +103,11 @@ public class DefaultCryptographyPipeline implements CryptographyPipeline {
         }
         writeToFile(outputFileMD5, Hash.normalize(inputStreamMessageDigest));
         writeToFile(outputFileGPGMD5, Hash.normalize(outputStreamMessageDigest));
-        LOGGER.info("File {} is successfully encrypted. Total bytes read {}. These files have been generated {},{},{}", inputFile.getPath(), bytesRead,
+        LOGGER.info("File {} is successfully encrypted. " +
+                        "Total bytes read: {}. " +
+                        "The following files have been generated: {}, {}, {}",
+                inputFile.getPath(),
+                bytesRead,
                 outputFileMD5.getPath(), outputFileGPG.getPath(), outputFileGPGMD5.getPath());
     }
 }

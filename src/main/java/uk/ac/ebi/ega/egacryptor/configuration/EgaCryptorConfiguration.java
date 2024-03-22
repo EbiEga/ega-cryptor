@@ -44,7 +44,7 @@ public class EgaCryptorConfiguration {
     @Bean
     public CryptographyPipeline initDefaultCryptographyPipeline(final Cryptography cryptography) {
         if (bufferSize > 0 && ((bufferSize & (bufferSize - 1)) != 0)) {
-            throw new RuntimeException("Buffer size for encryption should be power of 2");
+            throw new IllegalArgumentException("Buffer size for encryption should be power of 2");
         }
         return new DefaultCryptographyPipeline(cryptography, bufferSize);
     }
@@ -64,7 +64,7 @@ public class EgaCryptorConfiguration {
         final Resource resource = new ClassPathResource(publicKeyPath);
 
         if (!resource.exists()) {
-            throw new RuntimeException("Public key file ".concat(publicKeyPath).concat(" not found"));
+            throw new IOException("Public key file ".concat(publicKeyPath).concat(" not found"));
         }
 
         try (final InputStream inputStream = resource.getInputStream()) {

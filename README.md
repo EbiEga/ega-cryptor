@@ -35,7 +35,7 @@ check what java version is installed.
   ```
   java -jar ega-cryptor-2.0.0.jar --i="/path/to/file/tobe/encrypted/file1.bam, /path/to/folder/tobe/encrypted/test1" --o="/path/to/output/folder"
   ```
-- ##### Process multiple files in parallel - You can specify one of the the 3 options to allow application to   determine suitable no. of threads to be created.
+- ##### Process multiple files in parallel - You can specify one of the 3 options to allow the application to determine the suitable number of threads to be created.
   Allow application to use full resource capacity
   ```  
   java -jar ega-cryptor-2.0.0.jar --i="/path/to/file/tobe/encrypted/file1.bam, /path/to/folder/tobe/encrypted/test1" --o="/path/to/output/folder" -f
@@ -52,4 +52,4 @@ check what java version is installed.
   ```  
   java -jar ega-cryptor-2.0.0.jar --i="/path/to/file/tobe/encrypted/file1.bam, /path/to/folder/tobe/encrypted/test1" --o="/path/to/output/folder" -t=3
   ```
-  *Note if no option will be provided, application will process files sequenctially using single thread.
+  *Note if no option will be provided, application will process files sequentially using single thread.

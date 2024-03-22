@@ -33,7 +33,7 @@ class TaskExecutorServiceTest {
     void taskExecutorServiceCorrectlyHandlesEmptyList() {
         final ITaskExecutorService service = new TaskExecutorService(pipeline);
 
-        service.execute(Lists.emptyList());
+        service.execute(Collections.emptyList());
 
         verify(pipeline, never()).process(any());
     }
@@ -43,7 +43,7 @@ class TaskExecutorServiceTest {
     void taskExecutorServiceCorrectlyHandlesEmptyListAndNumberOfThreads() {
         final ITaskExecutorService service = new TaskExecutorService(pipeline);
 
-        service.execute(Lists.emptyList(), NUMBER_OF_THREADS);
+        service.execute(Collections.emptyList(), NUMBER_OF_THREADS);
 
         verify(pipeline, never()).process(any());
     }
